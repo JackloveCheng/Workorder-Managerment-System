@@ -698,3 +698,15 @@ create table gen_table_column (
   update_time       datetime                                   comment '更新时间',
   primary key (column_id)
 ) engine=innodb auto_increment=1 comment = '代码生成业务表字段';
+
+CREATE TABLE tickets (
+                         ticket_id INT AUTO_INCREMENT PRIMARY KEY,
+                         business_type VARCHAR(100) NOT NULL,
+                         title VARCHAR(255) NOT NULL,
+                         progress VARCHAR(50),
+                         submitter INT NOT NULL,
+                         handler INT,
+                         status VARCHAR(50) NOT NULL,
+                         FOREIGN KEY (submitter) REFERENCES users(user_id),
+                         FOREIGN KEY (handler) REFERENCES users(user_id)
+);
