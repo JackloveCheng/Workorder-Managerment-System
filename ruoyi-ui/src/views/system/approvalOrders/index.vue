@@ -52,48 +52,6 @@
     </el-form>
 
     <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['system:approvalOrders:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['system:approvalOrders:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['system:approvalOrders:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['system:approvalOrders:export']"
-        >导出</el-button>
-      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -129,21 +87,13 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:approvalOrders:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['system:approvalOrders:remove']"
-          >删除</el-button>
+          >审批</el-button>
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -155,10 +105,13 @@
     <!-- 添加或修改工单审批对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="评论" prop="comments">
+          <el-input v-model="form.comments" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="submitForm">通 过</el-button>
+        <el-button @click="cancel">拒 绝</el-button>
       </div>
     </el-dialog>
   </div>
@@ -166,6 +119,8 @@
 
 <script>
 import { listApprovalOrders, getApprovalOrders, delApprovalOrders, addApprovalOrders, updateApprovalOrders } from "@/api/system/approvalOrders";
+import { listApprovalRecords, getApprovalRecords, delApprovalRecords, addApprovalRecords, updateApprovalRecords } from "@/api/system/approvalRecords";
+
 
 export default {
   name: "ApprovalOrders",
@@ -203,6 +158,19 @@ export default {
       },
       // 表单参数
       form: {},
+      form_1:{
+        orderId: null,
+        orderNumber: null,
+        businessType: null,
+        title: null,
+        description: null,
+        status: null,
+        submitterId: null,
+        assigneeId: null,
+        createdAt: null,
+        updatedAt: null,
+        approvalRoleId:null ,
+      },
       // 表单校验
       rules: {
         orderNumber: [
@@ -244,14 +212,11 @@ export default {
     // 表单重置
     reset() {
       this.form = {
+        approvalId: null,
         orderId: null,
-        orderNumber: null,
-        businessType: null,
-        title: null,
-        description: null,
+        approverId: null,
         status: null,
-        submitterId: null,
-        assigneeId: null,
+        comments: null,
         createdAt: null,
         updatedAt: null
       };
@@ -284,30 +249,33 @@ export default {
       this.reset();
       const orderId = row.orderId || this.ids
       getApprovalOrders(orderId).then(response => {
-        this.form = response.data;
+        this.form_1 = response.data;
         this.open = true;
         this.title = "修改工单审批";
       });
     },
     /** 提交按钮 */
     submitForm() {
+      //增加审批记录
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.orderId != null) {
-            updateApprovalOrders(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addApprovalOrders(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
+          addApprovalRecords(this.form).then(response => {
+            this.$modal.msgSuccess("审批成功");
+            this.open = false;
+          });
+
+          this.form_1.status = "completed";
+          updateApprovalOrders(this.form_1).then(response => {
+            this.$modal.msgSuccess("修改成功");
+            this.open = false;
+            this.getList();
+          });
         }
       });
+
+
+      //改变工单状态
+
     },
     /** 删除按钮操作 */
     handleDelete(row) {

@@ -43,6 +43,8 @@ public class WorkOrdersController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(WorkOrders workOrders)
     {
+        //SecurityUtils.hasRole();
+        SecurityUtils.getLoginUser().getUser().getRoleId();
         workOrders.setSubmitterId(SecurityUtils.getLoginUser().getUser().getUserId());
         startPage();
         List<WorkOrders> list = workOrdersService.selectWorkOrdersList(workOrders);

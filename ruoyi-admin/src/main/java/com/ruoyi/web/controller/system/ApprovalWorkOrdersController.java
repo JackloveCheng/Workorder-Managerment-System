@@ -2,6 +2,8 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
 /**
  * 工单审批Controller
  * 
- * @author hao
+ * @author ruoyi
  * @date 2024-06-01
  */
 @RestController
@@ -41,6 +43,7 @@ public class ApprovalWorkOrdersController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(ApprovalWorkOrders approvalWorkOrders)
     {
+        approvalWorkOrders.setApprovalRoleId(SecurityUtils.getLoginUser().getDeptId());
         startPage();
         List<ApprovalWorkOrders> list = approvalWorkOrdersService.selectApprovalWorkOrdersList(approvalWorkOrders);
         return getDataTable(list);

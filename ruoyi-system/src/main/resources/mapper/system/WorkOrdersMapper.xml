@@ -15,10 +15,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="assigneeId"    column="assignee_id"    />
         <result property="createdAt"    column="created_at"    />
         <result property="updatedAt"    column="updated_at"    />
+        <result property="approvalRoleId"    column="approvalRoleId"    />
     </resultMap>
 
     <sql id="selectWorkOrdersVo">
-        select order_id, order_number, business_type, title, description, status, submitter_id, assignee_id, created_at, updated_at from work_orders
+        select order_id, order_number, business_type, title, description, status, submitter_id, assignee_id, created_at, updated_at, approvalRoleId from work_orders
     </sql>
 
     <select id="selectWorkOrdersList" parameterType="WorkOrders" resultMap="WorkOrdersResult">
@@ -27,10 +28,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="orderId != null "> and order_id = #{orderId}</if>
             <if test="orderNumber != null  and orderNumber != ''"> and order_number = #{orderNumber}</if>
             <if test="businessType != null  and businessType != ''"> and business_type = #{businessType}</if>
-            <if test="title != null  and title != ''"> and title like concat('%', #{title}, '%')</if>
-            <if test="description != null  and description != ''"> and description like concat('%', #{description}, '%')</if>
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="submitterId != null  and submitterId != ''"> and submitter_id = #{submitterId}</if>
+            <if test="submitterId != null "> and submitter_id = #{submitterId}</if>
+            <if test="assigneeId != null "> and assignee_id = #{assigneeId}</if>
+            <if test="createdAt != null "> and created_at = #{createdAt}</if>
+            <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
+            <if test="approvalRoleId != null "> and approvalRoleId = #{approvalRoleId}</if>
         </where>
     </select>
     
@@ -45,23 +50,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="orderNumber != null and orderNumber != ''">order_number,</if>
             <if test="businessType != null and businessType != ''">business_type,</if>
             <if test="title != null and title != ''">title,</if>
-            <if test="description != null and description != ''">description,</if>
+            <if test="description != null">description,</if>
             <if test="status != null and status != ''">status,</if>
             <if test="submitterId != null">submitter_id,</if>
             <if test="assigneeId != null">assignee_id,</if>
             <if test="createdAt != null">created_at,</if>
             <if test="updatedAt != null">updated_at,</if>
+            <if test="approvalRoleId != null">approvalRoleId,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderNumber != null and orderNumber != ''">#{orderNumber},</if>
             <if test="businessType != null and businessType != ''">#{businessType},</if>
             <if test="title != null and title != ''">#{title},</if>
-            <if test="description != null and description != ''">#{description},</if>
+            <if test="description != null">#{description},</if>
             <if test="status != null and status != ''">#{status},</if>
             <if test="submitterId != null">#{submitterId},</if>
             <if test="assigneeId != null">#{assigneeId},</if>
             <if test="createdAt != null">#{createdAt},</if>
             <if test="updatedAt != null">#{updatedAt},</if>
+            <if test="approvalRoleId != null">#{approvalRoleId},</if>
          </trim>
     </insert>
 
@@ -71,12 +78,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="orderNumber != null and orderNumber != ''">order_number = #{orderNumber},</if>
             <if test="businessType != null and businessType != ''">business_type = #{businessType},</if>
             <if test="title != null and title != ''">title = #{title},</if>
-            <if test="description != null and description != ''">description = #{description},</if>
+            <if test="description != null">description = #{description},</if>
             <if test="status != null and status != ''">status = #{status},</if>
             <if test="submitterId != null">submitter_id = #{submitterId},</if>
             <if test="assigneeId != null">assignee_id = #{assigneeId},</if>
             <if test="createdAt != null">created_at = #{createdAt},</if>
             <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="approvalRoleId != null">approvalRoleId = #{approvalRoleId},</if>
         </trim>
         where order_id = #{orderId}
     </update>

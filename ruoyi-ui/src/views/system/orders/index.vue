@@ -114,7 +114,13 @@
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-delete"
+            @click="handleDetailInfo"
+            v-hasPermi="['system:orders:remove']"
+          >详情</el-button>
           <el-button
             size="mini"
             type="text"
@@ -167,6 +173,13 @@
           </el-select>
         </el-form-item>
       </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
@@ -336,6 +349,12 @@ export default {
       this.download('system/orders/export', {
         ...this.queryParams
       }, `orders_${new Date().getTime()}.xlsx`)
+    },
+    /** 详情按钮操作 */
+    handleDetailInfo(){
+      this.reset();
+      this.open = true;
+      this.title = "添加工单信息";
     }
   }
 };

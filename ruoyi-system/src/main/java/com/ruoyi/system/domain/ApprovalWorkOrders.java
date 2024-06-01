@@ -10,19 +10,19 @@ import com.ruoyi.common.core.domain.BaseEntity;
 /**
  * 工单审批对象 work_orders
  * 
- * @author hao
+ * @author ruoyi
  * @date 2024-06-01
  */
 public class ApprovalWorkOrders extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** 工单ID */
-    @Excel(name = "工单ID")
+    /** 工单id */
+    @Excel(name = "工单id")
     private Long orderId;
 
-    /** 工单标识符 */
-    @Excel(name = "工单标识符")
+    /** 工单数量 */
+    @Excel(name = "工单数量")
     private String orderNumber;
 
     /** 工单类型 */
@@ -33,19 +33,20 @@ public class ApprovalWorkOrders extends BaseEntity
     @Excel(name = "工单标题")
     private String title;
 
-    /** 工单描述 */
-    @Excel(name = "工单描述")
+    /** 描述 */
+    @Excel(name = "描述")
     private String description;
 
-    /** 工单状态 */
-    @Excel(name = "工单状态")
+    /** 状态 */
+    @Excel(name = "状态")
     private String status;
 
-    /** 提交者 */
-    @Excel(name = "提交者")
+    /** 工单发起人 */
+    @Excel(name = "工单发起人")
     private Long submitterId;
 
-    /** 接受者 */
+    /** 工单接收人 */
+    @Excel(name = "工单接收人")
     private Long assigneeId;
 
     /** 创建时间 */
@@ -53,10 +54,14 @@ public class ApprovalWorkOrders extends BaseEntity
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date createdAt;
 
-    /** 更新时间 */
+    /** 修改时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "更新时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @Excel(name = "修改时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedAt;
+
+    /** 对应审批人员 */
+    @Excel(name = "对应审批人员")
+    private Long approvalRoleId;
 
     public void setOrderId(Long orderId) 
     {
@@ -148,6 +153,15 @@ public class ApprovalWorkOrders extends BaseEntity
     {
         return updatedAt;
     }
+    public void setApprovalRoleId(Long approvalRoleId) 
+    {
+        this.approvalRoleId = approvalRoleId;
+    }
+
+    public Long getApprovalRoleId() 
+    {
+        return approvalRoleId;
+    }
 
     @Override
     public String toString() {
@@ -162,6 +176,7 @@ public class ApprovalWorkOrders extends BaseEntity
             .append("assigneeId", getAssigneeId())
             .append("createdAt", getCreatedAt())
             .append("updatedAt", getUpdatedAt())
+            .append("approvalRoleId", getApprovalRoleId())
             .toString();
     }
 }

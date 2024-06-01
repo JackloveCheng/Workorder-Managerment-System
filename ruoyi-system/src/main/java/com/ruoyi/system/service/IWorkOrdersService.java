@@ -6,7 +6,7 @@ import com.ruoyi.system.domain.WorkOrders;
 /**
  * 工单信息Service接口
  * 
- * @author hao
+ * @author ruoyi
  * @date 2024-06-01
  */
 public interface IWorkOrdersService 
