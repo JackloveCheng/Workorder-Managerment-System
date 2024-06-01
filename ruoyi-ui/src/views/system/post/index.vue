@@ -213,6 +213,11 @@ export default {
     /** 查询岗位列表 */
     getList() {
       this.loading = true;
+
+      if (this.$auth.hasRole("common")) {//市级普通用户账号//获取当前登录人的角色
+        this.$store.state.roles.values()//获取当前登录账号
+      }
+
       listPost(this.queryParams).then(response => {
         this.postList = response.rows;
         this.total = response.total;

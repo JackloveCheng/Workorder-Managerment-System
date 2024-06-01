@@ -5,7 +5,7 @@ CREATE TABLE tickets (
                          progress VARCHAR(50),                       -- 进度
                          submitter VARCHAR(100) NOT NULL,            -- 提交者
                          handler VARCHAR(100),                       -- 受理人员
-                         status VARCHAR(50) NOT NULL,                -- 工单状态
+                         status VARCHAR(50) NOT NULL              -- 工单状态
 );
 -- 菜单 SQL
 insert into sys_menu (menu_name, parent_id, order_num, path, component, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)

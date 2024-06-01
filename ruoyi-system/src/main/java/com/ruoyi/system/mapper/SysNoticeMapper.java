@@ -8,6 +8,7 @@ import com.ruoyi.system.domain.SysNotice;
  * 
  * @author ruoyi
  */
+
 public interface SysNoticeMapper
 {
     /**

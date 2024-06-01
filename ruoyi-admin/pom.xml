@@ -16,7 +16,19 @@
     </description>
 
     <dependencies>
+        <!-- MyBatis-Plus -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus</artifactId>
+            <version>3.3.2</version>
+        </dependency>
 
+        <!-- Apache Commons Lang -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.12.0</version>
+        </dependency>
         <!-- spring-boot-devtools -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -54,6 +66,8 @@
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-quartz</artifactId>
         </dependency>
+
+
 
         <!-- 代码生成-->
         <dependency>
