@@ -118,7 +118,7 @@
             size="mini"
             type="text"
             icon="el-icon-delete"
-            @click="handleDetailInfo"
+            @click="handleDetailInfo(scope.row)"
             v-hasPermi="['system:orders:remove']"
           >详情</el-button>
           <el-button
@@ -179,12 +179,12 @@
       </div>
     </el-dialog>
 
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
-    </el-dialog>
+<!--    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>-->
+<!--      <div slot="footer" class="dialog-footer">-->
+<!--        <el-button type="primary" @click="submitForm">确 定</el-button>-->
+<!--        <el-button @click="cancel">取 消</el-button>-->
+<!--      </div>-->
+<!--    </el-dialog>-->
   </div>
 </template>
 
@@ -351,10 +351,14 @@ export default {
       }, `orders_${new Date().getTime()}.xlsx`)
     },
     /** 详情按钮操作 */
-    handleDetailInfo(){
+    handleDetailInfo(row){
       this.reset();
-      this.open = true;
-      this.title = "添加工单信息";
+      const orderId = row.orderId || this.ids
+      getOrders(orderId).then(response => {
+        this.form = response.data;
+        this.open = true;
+        this.title = "工单信息";
+      });
     }
   }
 };
