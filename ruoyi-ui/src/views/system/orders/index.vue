@@ -159,8 +159,8 @@
         <el-form-item label="工单标题" prop="title">
           <el-input v-model="form.title" placeholder="请输入工单标题" />
         </el-form-item>
-        <el-form-item label="工单描述" prop="description">
-          <el-input v-model="form.description" type="textarea" placeholder="请输入内容" />
+        <el-form-item label="描述">
+          <editor v-model="form.description" :min-height="192"/>
         </el-form-item>
         <el-form-item label="工单状态" prop="status">
           <el-select v-model="form.status" placeholder="请选择工单状态">
