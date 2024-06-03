@@ -301,7 +301,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加工单信息";
+      //this.title = "添加工单信息";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {

@@ -44,7 +44,7 @@ public class WorkOrdersController extends BaseController
     public TableDataInfo list(WorkOrders workOrders)
     {
         //SecurityUtils.hasRole();
-        SecurityUtils.getLoginUser().getUser().getRoleId();
+        SecurityUtils.getLoginUser().getUser().getDept().getDeptId();
         workOrders.setSubmitterId(SecurityUtils.getLoginUser().getUser().getUserId());
         startPage();
         List<WorkOrders> list = workOrdersService.selectWorkOrdersList(workOrders);
@@ -83,6 +83,8 @@ public class WorkOrdersController extends BaseController
     public AjaxResult add(@RequestBody WorkOrders workOrders)
     {
         workOrders.setSubmitterId(SecurityUtils.getUserId());
+        Long tmp = 204L;
+        workOrders.setApprovalRoleId(tmp);
         return toAjax(workOrdersService.insertWorkOrders(workOrders));
     }
 

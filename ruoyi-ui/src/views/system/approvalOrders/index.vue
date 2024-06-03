@@ -243,6 +243,7 @@ export default {
       this.reset();
       this.open = true;
       this.title = "添加工单审批";
+      dict.type.system
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -252,6 +253,7 @@ export default {
         this.form_1 = response.data;
         this.open = true;
         this.title = "修改工单审批";
+
       });
     },
     /** 提交按钮 */
@@ -261,13 +263,21 @@ export default {
         if (valid) {
           addApprovalRecords(this.form).then(response => {
             this.$modal.msgSuccess("审批成功");
-            this.open = false;
+            this.open = true;
           });
+          var length = this.$store.state.dict.dict.at(0).value.length;
+          var status = this.form_1.status;
+          for (let i = 0; i < length; i++) {
+            var item = this.$store.state.dict.dict.at(0).value[i];
+            if (item.dictValue === status) {
+              this.form_1.status = this.$store.state.dict.dict.at(0).value[i + 1].dictValue;
+            }
+          }
+          //this.title = this.form_1.status;
 
-          this.form_1.status = "completed";
           updateApprovalOrders(this.form_1).then(response => {
             this.$modal.msgSuccess("修改成功");
-            this.open = false;
+            this.open = true;
             this.getList();
           });
         }

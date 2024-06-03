@@ -43,7 +43,8 @@ public class ApprovalWorkOrdersController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(ApprovalWorkOrders approvalWorkOrders)
     {
-        approvalWorkOrders.setApprovalRoleId(SecurityUtils.getLoginUser().getDeptId());
+        if (SecurityUtils.getDeptId() != 100)
+            approvalWorkOrders.setApprovalRoleId(SecurityUtils.getLoginUser().getUser().getDept().getParentId());
         startPage();
         List<ApprovalWorkOrders> list = approvalWorkOrdersService.selectApprovalWorkOrdersList(approvalWorkOrders);
         return getDataTable(list);
