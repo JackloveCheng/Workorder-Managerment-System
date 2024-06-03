@@ -96,7 +96,6 @@
         </template>
       </el-table-column>
       <el-table-column label="工单标题" align="center" prop="title" />
-      <el-table-column label="工单描述" align="center" prop="description" />
       <el-table-column label="工单状态" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_ticket_status" :value="scope.row.status"/>
@@ -144,10 +143,10 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="工单标识符" prop="orderNumber">
-          <el-input v-model="form.orderNumber" placeholder="请输入工单标识符" />
+          <el-input v-model="form.orderNumber" disabled="isReadOnly" placeholder="请输入工单标识符" />
         </el-form-item>
         <el-form-item label="工单类型" prop="businessType">
-          <el-select v-model="form.businessType" placeholder="请选择工单类型">
+          <el-select v-model="form.businessType"  disabled="isReadOnly" placeholder="请选择工单类型">
             <el-option
               v-for="dict in dict.type.sys_ticket_type"
               :key="dict.value"
@@ -157,13 +156,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="工单标题" prop="title">
-          <el-input v-model="form.title" placeholder="请输入工单标题" />
+          <el-input v-model="form.title" disabled="isReadOnly" placeholder="请输入工单标题" />
         </el-form-item>
         <el-form-item label="描述">
-          <editor v-model="form.description" :min-height="192"/>
+          <editor v-model="form.description" :min-height="192" :readOnly="isReadOnly" />
         </el-form-item>
         <el-form-item label="工单状态" prop="status">
-          <el-select v-model="form.status" placeholder="请选择工单状态">
+          <el-select v-model="form.status" disabled="isReadOnly" placeholder="请选择工单状态">
             <el-option
               v-for="dict in dict.type.sys_ticket_status"
               :key="dict.value"
@@ -357,6 +356,7 @@ export default {
       getOrders(orderId).then(response => {
         this.form = response.data;
         this.open = true;
+        this.isReadOnly = true;
         this.title = "工单信息";
       });
     }
