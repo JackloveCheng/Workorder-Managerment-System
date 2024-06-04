@@ -2,8 +2,6 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
-
-import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,49 +22,48 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
 /**
- * 工单审批Controller
- *
- * @author ruoyi
- * @date 2024-06-01
+ * 接收工单Controller
+ * 
+ * @author hhh
+ * @date 2024-06-04
  */
 @RestController
-@RequestMapping("/system/approvalOrders")
-public class ApprovalWorkOrdersController extends BaseController
+@RequestMapping("/system/acceptOrders")
+public class AcceptOrdersController extends BaseController
 {
     @Autowired
     private IWorkOrdersService workOrdersService;
 
     /**
-     * 查询工单信息列表
+     * 查询接收工单列表
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:list')")
+    @PreAuthorize("@ss.hasPermi('system:acceptOrders:list')")
     @GetMapping("/list")
     public TableDataInfo list(WorkOrders workOrders)
     {
-        if (SecurityUtils.getDeptId() != 100)
-            workOrders.setApprovalRoleId(SecurityUtils.getLoginUser().getUser().getDept().getParentId());
+        workOrders.setStatus("completed");
         startPage();
         List<WorkOrders> list = workOrdersService.selectWorkOrdersList(workOrders);
         return getDataTable(list);
     }
 
     /**
-     * 导出工单信息列表
+     * 导出接收工单列表
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:export')")
-    @Log(title = "工单信息", businessType = BusinessType.EXPORT)
+    @PreAuthorize("@ss.hasPermi('system:acceptOrders:export')")
+    @Log(title = "接收工单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, WorkOrders workOrders)
     {
         List<WorkOrders> list = workOrdersService.selectWorkOrdersList(workOrders);
         ExcelUtil<WorkOrders> util = new ExcelUtil<WorkOrders>(WorkOrders.class);
-        util.exportExcel(response, list, "工单信息数据");
+        util.exportExcel(response, list, "接收工单数据");
     }
 
     /**
-     * 获取工单信息详细信息
+     * 获取接收工单详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:query')")
+    @PreAuthorize("@ss.hasPermi('system:acceptOrders:query')")
     @GetMapping(value = "/{orderId}")
     public AjaxResult getInfo(@PathVariable("orderId") Long orderId)
     {
@@ -74,10 +71,10 @@ public class ApprovalWorkOrdersController extends BaseController
     }
 
     /**
-     * 新增工单信息
+     * 新增接收工单
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:add')")
-    @Log(title = "工单信息", businessType = BusinessType.INSERT)
+    @PreAuthorize("@ss.hasPermi('system:acceptOrders:add')")
+    @Log(title = "接收工单", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody WorkOrders workOrders)
     {
@@ -85,10 +82,10 @@ public class ApprovalWorkOrdersController extends BaseController
     }
 
     /**
-     * 修改工单信息
+     * 修改接收工单
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:edit')")
-    @Log(title = "工单信息", businessType = BusinessType.UPDATE)
+    @PreAuthorize("@ss.hasPermi('system:acceptOrders:edit')")
+    @Log(title = "接收工单", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody WorkOrders workOrders)
     {
@@ -96,11 +93,11 @@ public class ApprovalWorkOrdersController extends BaseController
     }
 
     /**
-     * 删除工单信息
+     * 删除接收工单
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:remove')")
-    @Log(title = "工单信息", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{orderIds}")
+    @PreAuthorize("@ss.hasPermi('system:acceptOrders:remove')")
+    @Log(title = "接收工单", businessType = BusinessType.DELETE)
+	@DeleteMapping("/{orderIds}")
     public AjaxResult remove(@PathVariable Long[] orderIds)
     {
         return toAjax(workOrdersService.deleteWorkOrdersByOrderIds(orderIds));

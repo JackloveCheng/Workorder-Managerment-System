@@ -253,7 +253,6 @@ export default {
         this.form_1 = response.data;
         this.open = true;
         this.title = "修改工单审批";
-
       });
     },
     /** 提交按钮 */
