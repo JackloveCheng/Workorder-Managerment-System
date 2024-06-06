@@ -64,6 +64,13 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-info"
+            @click="handleDetailInfo(scope.row)"
+            v-hasPermi="['system:dealOrders:edit']"
+          >详情</el-button>
+          <el-button
+            size="mini"
+            type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:dealOrders:edit']"
@@ -83,26 +90,36 @@
     <!-- 添加或修改接收工单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="工单数量" prop="orderNumber">
-          <el-input v-model="form.orderNumber" placeholder="请输入工单数量" />
+        <el-form-item label="工单标识符" prop="orderNumber">
+          <el-input v-model="form.orderNumber" v-bind:disabled="isReadOnly" placeholder="请输入工单标识符" />
+        </el-form-item>
+        <el-form-item label="工单类型" prop="businessType">
+          <el-select v-model="form.businessType"  v-bind:disabled="isReadOnly" placeholder="请选择工单类型">
+            <el-option
+              v-for="dict in dict.type.sys_ticket_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="工单标题" prop="title">
-          <el-input v-model="form.title" placeholder="请输入工单标题" />
+          <el-input v-model="form.title" v-bind:disabled="isReadOnly" placeholder="请输入工单标题" />
         </el-form-item>
         <el-form-item label="描述">
-          <editor v-model="form.description" :min-height="192"/>
+          <editor v-model="form.description" :min-height="192" :readOnly="isReadOnly" />
         </el-form-item>
-        <el-form-item label="工单发起人" prop="submitterId">
-          <el-input v-model="form.submitterId" placeholder="请输入工单发起人" />
-        </el-form-item>
-        <el-form-item label="工单接收人" prop="assigneeId">
-          <el-input v-model="form.assigneeId" placeholder="请输入工单接收人" />
+        <el-form-item label="工单状态" prop="status">
+          <el-select v-model="form.status" v-bind:disabled="isReadOnly" placeholder="请选择工单状态">
+            <el-option
+              v-for="dict in dict.type.sys_ticket_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
-      </div>
     </el-dialog>
   </div>
 </template>
@@ -133,6 +150,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      isReadOnly:false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -235,7 +253,6 @@ export default {
           this.$modal.msgSuccess("执行成功");
           this.getList();
         });
-
       });
     },
     /** 提交按钮 */
@@ -273,7 +290,17 @@ export default {
       this.download('system/dealOrders/export', {
         ...this.queryParams
       }, `dealOrders_${new Date().getTime()}.xlsx`)
+    },
+    handleDetailInfo(row){
+      const orderId = row.orderId || this.ids
+      getDealOrders(orderId).then(response => {
+        this.form = response.data;
+        this.open = true;
+        this.isReadOnly = true;
+        this.title = "工单详情";
+      });
     }
+
   }
 };
 </script>

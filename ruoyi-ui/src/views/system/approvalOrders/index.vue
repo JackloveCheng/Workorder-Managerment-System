@@ -87,6 +87,7 @@
           <el-button
             size="mini"
             type="text"
+            icon="el-icon-info"
             @click="handleDetailInfo(scope.row)"
             v-hasPermi="['system:approvalOrders:edit']"
           >详情</el-button>

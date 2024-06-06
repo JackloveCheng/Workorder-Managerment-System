@@ -2,6 +2,8 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -78,6 +80,7 @@ public class AcceptOrdersController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody WorkOrders workOrders)
     {
+        workOrders.setAssigneeId(SecurityUtils.getUserId());
         return toAjax(workOrdersService.insertWorkOrders(workOrders));
     }
 

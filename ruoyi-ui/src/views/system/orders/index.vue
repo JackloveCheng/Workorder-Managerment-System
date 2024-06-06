@@ -71,7 +71,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['system:orders:remove']"
-        >删除</el-button>
+        >撤销工单</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -99,6 +99,13 @@
       <el-table-column label="工单状态" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_ticket_status" :value="scope.row.status"/>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-info"
+            @click="handleDetailInfo(scope.row)"
+            v-hasPermi="['system:orders:remove']"
+          >详情</el-button>
         </template>
       </el-table-column>
       <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
@@ -116,7 +123,7 @@
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-delete"
+            icon="el-icon-info"
             @click="handleDetailInfo(scope.row)"
             v-hasPermi="['system:orders:remove']"
           >详情</el-button>
