@@ -64,6 +64,12 @@
           <el-button
             size="mini"
             type="text"
+            @click="handleDetailInfo(scope.row)"
+            v-hasPermi="['system:acceptOrders:remove']"
+          >详情</el-button>
+          <el-button
+            size="mini"
+            type="text"
             @click="handleAccept(scope.row)"
             v-hasPermi="['system:acceptOrders:remove']"
           >接受</el-button>
@@ -103,6 +109,45 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <!-- 详情对话框 -->
+    <el-dialog :title="title" :visible.sync="open_detail" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="工单标识符" prop="orderNumber">
+          <el-input v-model="form.orderNumber" v-bind:disabled="isReadOnly" placeholder="请输入工单标识符" />
+        </el-form-item>
+        <el-form-item label="工单类型" prop="businessType">
+          <el-select v-model="form.businessType"  v-bind:disabled="isReadOnly" placeholder="请选择工单类型">
+            <el-option
+              v-for="dict in dict.type.sys_ticket_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="工单标题" prop="title">
+          <el-input v-model="form.title" v-bind:disabled="isReadOnly" placeholder="请输入工单标题" />
+        </el-form-item>
+        <el-form-item label="描述">
+          <editor v-model="form.description" :min-height="192" :readOnly="isReadOnly" />
+        </el-form-item>
+        <el-form-item label="工单状态" prop="status">
+          <el-select v-model="form.status" v-bind:disabled="isReadOnly" placeholder="请选择工单状态">
+            <el-option
+              v-for="dict in dict.type.sys_ticket_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -132,6 +177,10 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否显示详情
+      open_detail: false,
+      // 是否只读
+      isReadOnly: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -263,11 +312,13 @@ export default {
       }, `acceptOrders_${new Date().getTime()}.xlsx`)
     },
 
+    /** 接受按钮操作 */
     handleAccept(row) {
       this.reset();
       const orderId = row.orderId || this.ids
       getAcceptOrders(orderId).then(response => {
         this.form = response.data;
+        this.form.assigneeId = this.$store.state.id;
         var length = this.$store.state.dict.dict.at(0).value.length;
         var status = this.form.status;
         for (let i = 0; i < length; i++) {
@@ -281,6 +332,16 @@ export default {
           this.getList();
         });
 
+      });
+    },
+    handleDetailInfo(row){
+      this.reset();
+      const orderId = row.orderId || this.ids
+      getAcceptOrders(orderId).then(response => {
+        this.form = response.data;
+        this.open_detail = true;
+        this.isReadOnly = true;
+        this.title = "工单详情";
       });
     }
 

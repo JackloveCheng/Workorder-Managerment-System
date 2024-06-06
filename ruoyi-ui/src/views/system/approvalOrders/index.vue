@@ -87,6 +87,12 @@
           <el-button
             size="mini"
             type="text"
+            @click="handleDetailInfo(scope.row)"
+            v-hasPermi="['system:approvalOrders:edit']"
+          >详情</el-button>
+          <el-button
+            size="mini"
+            type="text"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['system:approvalOrders:edit']"
           >审批</el-button>
@@ -102,7 +108,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改工单审批对话框 -->
+    <!-- 审批对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="评论" prop="comments">
@@ -112,6 +118,44 @@
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">通 过</el-button>
         <el-button @click="cancel">拒 绝</el-button>
+      </div>
+    </el-dialog>
+    <!-- 详情对话框 -->
+    <el-dialog :title="title" :visible.sync="open_detail" width="500px" append-to-body>
+      <el-form ref="form_1" :model="form_1" :rules="rules" label-width="80px">
+        <el-form-item label="工单标识符" prop="orderNumber">
+          <el-input v-model="form_1.orderNumber" v-bind:disabled="isReadOnly" placeholder="请输入工单标识符" />
+        </el-form-item>
+        <el-form-item label="工单类型" prop="businessType">
+          <el-select v-model="form_1.businessType"  v-bind:disabled="isReadOnly" placeholder="请选择工单类型">
+            <el-option
+              v-for="dict in dict.type.sys_ticket_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="工单标题" prop="title">
+          <el-input v-model="form.title" v-bind:disabled="isReadOnly" placeholder="请输入工单标题" />
+        </el-form-item>
+        <el-form-item label="描述">
+          <editor v-model="form_1.description" :min-height="192" :readOnly="isReadOnly" />
+        </el-form-item>
+        <el-form-item label="工单状态" prop="status">
+          <el-select v-model="form_1.status" v-bind:disabled="isReadOnly" placeholder="请选择工单状态">
+            <el-option
+              v-for="dict in dict.type.sys_ticket_status"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -145,6 +189,10 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 是否显示详情
+      open_detail: false,
+      // 详情是否只读
+      isReadOnly: true,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -206,8 +254,20 @@ export default {
     },
     // 取消按钮
     cancel() {
-      this.open = false;
-      this.reset();
+      this.$refs["form"].validate(valid => {
+        if (valid) {
+          addApprovalRecords(this.form).then(response => {
+            this.$modal.msgSuccess("审批成功");
+            this.open = false;
+          });
+          this.form_1.status = "refused";
+          updateApprovalOrders(this.form_1).then(response => {
+            this.open = true;
+            this.getList();
+          });
+        }
+      });
+
     },
     // 表单重置
     reset() {
@@ -248,11 +308,12 @@ export default {
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
-      const orderId = row.orderId || this.ids
+      const orderId = row.orderId || this.ids;
       getApprovalOrders(orderId).then(response => {
         this.form_1 = response.data;
         this.open = true;
         this.title = "修改工单审批";
+        this.form.orderId = orderId;
       });
     },
     /** 提交按钮 */
@@ -272,8 +333,6 @@ export default {
               this.form_1.status = this.$store.state.dict.dict.at(0).value[i + 1].dictValue;
             }
           }
-          //this.title = this.form_1.status;
-
           updateApprovalOrders(this.form_1).then(response => {
             this.$modal.msgSuccess("修改成功");
             this.open = true;
@@ -301,6 +360,16 @@ export default {
       this.download('system/approvalOrders/export', {
         ...this.queryParams
       }, `approvalOrders_${new Date().getTime()}.xlsx`)
+    },
+    /** 详情按钮操作 */
+    handleDetailInfo(row){
+      const orderId = row.orderId || this.ids
+      getApprovalOrders(orderId).then(response => {
+        this.form_1 = response.data;
+        this.open_detail = true;
+        this.isReadOnly = true;
+        this.title = "工单详情";
+      });
     }
   }
 };
