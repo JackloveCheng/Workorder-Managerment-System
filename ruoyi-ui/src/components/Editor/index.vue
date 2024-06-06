@@ -157,6 +157,10 @@ export default {
     },
     // 上传前校检格式和大小
     handleBeforeUpload(file) {
+      if (this.readOnly) {
+        this.$message.error(`不允许修改!`);
+        return false;
+      }
       const type = ["image/jpeg", "image/jpg", "image/png", "image/svg"];
       const isJPG = type.includes(file.type);
       // 检验文件格式

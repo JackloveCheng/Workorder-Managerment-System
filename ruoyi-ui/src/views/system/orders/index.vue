@@ -143,10 +143,10 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="工单标识符" prop="orderNumber">
-          <el-input v-model="form.orderNumber" v-bind:readonly="isReadOnly" placeholder="请输入工单标识符" />
+          <el-input v-model="form.orderNumber" v-bind:disabled="isReadOnly" placeholder="请输入工单标识符" />
         </el-form-item>
         <el-form-item label="工单类型" prop="businessType">
-          <el-select v-model="form.businessType"  v-bind:readonly="isReadOnly" placeholder="请选择工单类型">
+          <el-select v-model="form.businessType"  v-bind:disabled="isReadOnly" placeholder="请选择工单类型">
             <el-option
               v-for="dict in dict.type.sys_ticket_type"
               :key="dict.value"
@@ -156,13 +156,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="工单标题" prop="title">
-          <el-input v-model="form.title" v-bind:readonly="isReadOnly" placeholder="请输入工单标题" />
+          <el-input v-model="form.title" v-bind:disabled="isReadOnly" placeholder="请输入工单标题" />
         </el-form-item>
         <el-form-item label="描述">
           <editor v-model="form.description" :min-height="192" :readOnly="isReadOnly" />
         </el-form-item>
         <el-form-item label="工单状态" prop="status">
-          <el-select v-model="form.status" v-bind:readonly="isReadOnly" placeholder="请选择工单状态">
+          <el-select v-model="form.status" v-bind:disabled="isReadOnly" placeholder="请选择工单状态">
             <el-option
               v-for="dict in dict.type.sys_ticket_status"
               :key="dict.value"
