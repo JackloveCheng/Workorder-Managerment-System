@@ -83,8 +83,10 @@ public class WorkOrdersController extends BaseController
     public AjaxResult add(@RequestBody WorkOrders workOrders)
     {
         workOrders.setSubmitterId(SecurityUtils.getUserId());
-        Long tmp = 204L;
+        Long tmp = 103L;
         workOrders.setApprovalRoleId(tmp);
+        String str = "pending_area";
+        workOrders.setStatus(str);
         return toAjax(workOrdersService.insertWorkOrders(workOrders));
     }
 

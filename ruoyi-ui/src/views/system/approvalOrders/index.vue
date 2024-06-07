@@ -328,6 +328,11 @@ export default {
           });
           var length = this.$store.state.dict.dict.at(0).value.length;
           var status = this.form_1.status;
+          if (this.form_1.approvalRoleId > 200) {
+            var id = this.form_1.approvalRoleId - 2;
+            this.form_1.approvalRoleId = id;
+          }
+
           for (let i = 0; i < length; i++) {
             var item = this.$store.state.dict.dict.at(0).value[i];
             if (item.dictValue === status) {

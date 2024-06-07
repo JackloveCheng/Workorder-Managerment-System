@@ -168,6 +168,9 @@
         <el-form-item label="描述">
           <editor v-model="form.description" :min-height="192" :readOnly="isReadOnly" />
         </el-form-item>
+        <el-form-item label="流程图">
+          <vue-flowchart :nodes="nodes" :edges="edges" :options="options"></vue-flowchart>
+        </el-form-item>
         <el-form-item label="工单状态" prop="status">
           <el-select v-model="form.status" v-bind:disabled="isReadOnly" placeholder="请选择工单状态">
             <el-option
@@ -185,7 +188,36 @@
       </div>
     </el-dialog>
 
-<!--    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>-->
+    <el-dialog :title="title" :visible.sync="open_detail" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="工单标识符" prop="orderNumber">
+          <el-input v-model="form.orderNumber" v-bind:disabled="isReadOnly" placeholder="请输入工单标识符" />
+        </el-form-item>
+        <el-form-item label="工单类型" prop="businessType">
+          <el-select v-model="form.businessType"  v-bind:disabled="isReadOnly" placeholder="请选择工单类型">
+            <el-option
+              v-for="dict in dict.type.sys_ticket_type"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="工单标题" prop="title">
+          <el-input v-model="form.title" v-bind:disabled="isReadOnly" placeholder="请输入工单标题" />
+        </el-form-item>
+        <el-form-item label="描述">
+          <editor v-model="form.description" :min-height="192" :readOnly="isReadOnly" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+
+    <!--    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>-->
 <!--      <div slot="footer" class="dialog-footer">-->
 <!--        <el-button type="primary" @click="submitForm">确 定</el-button>-->
 <!--        <el-button @click="cancel">取 消</el-button>-->
@@ -220,6 +252,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      open_detail:false,
       isReadOnly: false,
       // 查询参数
       queryParams: {
@@ -308,7 +341,7 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
-      this.open = true;
+      this.open_detail = true;
       this.isReadOnly = false;
       this.title = "添加工单信息";
     },

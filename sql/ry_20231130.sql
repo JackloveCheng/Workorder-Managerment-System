@@ -707,6 +707,6 @@ CREATE TABLE tickets (
                          submitter INT NOT NULL,
                          handler INT,
                          status VARCHAR(50) NOT NULL,
-                         FOREIGN KEY (submitter) REFERENCES users(user_id),
-                         FOREIGN KEY (handler) REFERENCES users(user_id)
+                         FOREIGN KEY (submitter) REFERENCES sys_user(user_id),
+                         FOREIGN KEY (handler) REFERENCES sys_user(user_id)
 );
