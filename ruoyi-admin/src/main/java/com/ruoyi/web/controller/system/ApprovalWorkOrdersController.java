@@ -45,6 +45,7 @@ public class ApprovalWorkOrdersController extends BaseController
     {
         if (SecurityUtils.getDeptId() != 100)
             workOrders.setApprovalRoleId(SecurityUtils.getLoginUser().getUser().getDept().getParentId());
+        workOrders.setStatus("test");
         startPage();
         List<WorkOrders> list = workOrdersService.selectWorkOrdersList(workOrders);
         return getDataTable(list);

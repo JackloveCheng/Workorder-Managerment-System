@@ -79,6 +79,7 @@ public class ApprovalRecordsController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody ApprovalRecords approvalRecords)
     {
+        approvalRecords.setApproverId(SecurityUtils.getUserId());
         return toAjax(approvalRecordsService.insertApprovalRecords(approvalRecords));
     }
 

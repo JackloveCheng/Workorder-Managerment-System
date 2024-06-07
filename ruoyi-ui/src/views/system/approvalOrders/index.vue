@@ -341,7 +341,7 @@ export default {
           }
           updateApprovalOrders(this.form_1).then(response => {
             this.$modal.msgSuccess("修改成功");
-            this.open = true;
+            this.open = false;
             this.getList();
           });
         }

@@ -103,7 +103,7 @@
             size="mini"
             type="text"
             icon="el-icon-info"
-            @click="handleDetailInfo(scope.row)"
+            @click="handleApprovalDetailInfo(scope.row)"
             v-hasPermi="['system:orders:remove']"
           >详情</el-button>
         </template>
@@ -216,18 +216,34 @@
       </div>
     </el-dialog>
 
+    <el-dialog :title="title" :visible.sync="open_approval" width="1000px" height="1000px">
+      <el-table v-loading="loading" :data="approvalsList" height="500px">
+        <el-table-column type="selection" width="55" align="center" />
+        <el-table-column label="id" align="center" prop="approvalId" />
+        <el-table-column label="工单id" align="center" prop="orderId" />
+        <el-table-column label="审批人" align="center" prop="approverId" />
+        <el-table-column label="状态" align="center" prop="status" />
+        <el-table-column label="评论" align="center" prop="comments" />
+        <el-table-column label="创建时间" align="center" prop="createdAt" width="180">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.createdAt, '{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="更新时间" align="center" prop="updatedAt" width="180">
+          <template slot-scope="scope">
+            <span>{{ parseTime(scope.row.updatedAt, '{y}-{m}-{d}') }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
 
-    <!--    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>-->
-<!--      <div slot="footer" class="dialog-footer">-->
-<!--        <el-button type="primary" @click="submitForm">确 定</el-button>-->
-<!--        <el-button @click="cancel">取 消</el-button>-->
-<!--      </div>-->
-<!--    </el-dialog>-->
   </div>
 </template>
 
 <script>
 import { listOrders, getOrders, delOrders, addOrders, updateOrders } from "@/api/system/orders";
+import {getApprovalRecords} from "@/api/system/approvalRecords";
+import {listApprovalRecords} from "../../../api/system/approvalRecords";
 
 export default {
   name: "Orders",
@@ -248,11 +264,13 @@ export default {
       total: 0,
       // 工单信息表格数据
       ordersList: [],
+      approvalsList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
       open_detail:false,
+      open_approval:false,
       isReadOnly: false,
       // 查询参数
       queryParams: {
@@ -265,6 +283,7 @@ export default {
         description: null,
         status: null,
       },
+
       // 表单参数
       form: {},
       // 表单校验
@@ -284,7 +303,17 @@ export default {
         status: [
           { required: true, message: "工单状态不能为空", trigger: "change" }
         ],
-      }
+      },
+      queryParams_approval: {
+        pageNum: 1,
+        pageSize: 10,
+        orderId: null,
+        approverId: null,
+        status: null,
+        comments: null,
+        createdAt: null,
+        updatedAt: null,
+      },
     };
   },
   created() {
@@ -294,7 +323,6 @@ export default {
     /** 查询工单信息列表 */
     getList() {
       this.loading = true;
-      console.log(this.queryParams.submitterId);
       listOrders(this.queryParams).then(response => {
         this.ordersList = response.rows;
         this.total = response.total;
@@ -399,7 +427,19 @@ export default {
         this.form = response.data;
         this.open = true;
         this.isReadOnly = true;
-        this.title = "工单信息";
+        this.title = "工单详情";
+      });
+    },
+
+    handleApprovalDetailInfo(row){
+      const orderId = row.orderId || this.ids
+      this.loading = true;
+      this.open_approval = true;
+      this.queryParams_approval.orderId = orderId;
+      this.title = "审批详情";
+      listApprovalRecords(this.queryParams_approval).then(response => {
+        this.approvalsList = response.rows;
+        this.loading = false;
       });
     }
   }
