@@ -1,5 +1,6 @@
 package com.ruoyi.system.service;
 
+import java.util.Date;
 import java.util.List;
 import com.ruoyi.system.domain.WorkOrders;
 
@@ -58,4 +59,12 @@ public interface IWorkOrdersService
      * @return 结果
      */
     public int deleteWorkOrdersByOrderId(Long orderId);
+
+    /**
+     * 判断工单是否超时
+     *
+     * @param orderId 工单信息主键
+     * @return 工单信息
+     */
+    public int updateOverTimeOrders(Date date);
 }

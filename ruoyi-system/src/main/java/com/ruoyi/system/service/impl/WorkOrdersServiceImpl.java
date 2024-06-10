@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.impl;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -90,4 +91,13 @@ public class WorkOrdersServiceImpl implements IWorkOrdersService
     {
         return workOrdersMapper.deleteWorkOrdersByOrderId(orderId);
     }
+
+    /**
+     *
+     *
+     * @param date 工单信息主键
+     * @return 结果
+     */
+    @Override
+    public int updateOverTimeOrders(Date date) {return workOrdersMapper.updateOverTimeOrders(date);};
 }

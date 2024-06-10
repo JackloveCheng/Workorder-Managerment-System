@@ -61,6 +61,14 @@ public class WorkOrders extends BaseEntity
     @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
     private Long approvalRoleId;
 
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Date approvalFinishedTime;
+
+    /** $column.columnComment */
+    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    private Integer isOvertime;
+
     public void setOrderId(Long orderId) 
     {
         this.orderId = orderId;
@@ -161,6 +169,25 @@ public class WorkOrders extends BaseEntity
         return approvalRoleId;
     }
 
+    public void setApprovalFinishedTime(Date approvalFinishedTime)
+    {
+        this.approvalFinishedTime = approvalFinishedTime;
+    }
+
+    public Date getApprovalFinishedTime()
+    {
+        return approvalFinishedTime;
+    }
+    public void setIsOvertime(Integer isOvertime)
+    {
+        this.isOvertime = isOvertime;
+    }
+
+    public Integer getIsOvertime()
+    {
+        return isOvertime;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -175,6 +202,8 @@ public class WorkOrders extends BaseEntity
             .append("createdAt", getCreatedAt())
             .append("updatedAt", getUpdatedAt())
             .append("approvalRoleId", getApprovalRoleId())
+            .append("approvalFinishedTime", getApprovalFinishedTime())
+            .append("isOvertime", getIsOvertime())
             .toString();
     }
 }

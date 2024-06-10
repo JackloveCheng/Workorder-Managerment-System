@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import com.ruoyi.common.utils.SecurityUtils;
@@ -35,7 +37,7 @@ public class AcceptOrdersController extends BaseController
 {
     @Autowired
     private IWorkOrdersService workOrdersService;
-
+    Map<Long, String> map = new HashMap<>();
     /**
      * 查询接收工单列表
      */
@@ -43,7 +45,12 @@ public class AcceptOrdersController extends BaseController
     @GetMapping("/list")
     public TableDataInfo list(WorkOrders workOrders)
     {
+        map.clear();
+        map.put(208L, "net_wrong");
+        map.put(209L, "device_fix");
+        map.put(210L, "purchase");
         workOrders.setStatus("completed");
+        workOrders.setBusinessType(map.get(SecurityUtils.getDeptId()));
         startPage();
         List<WorkOrders> list = workOrdersService.selectWorkOrdersList(workOrders);
         return getDataTable(list);

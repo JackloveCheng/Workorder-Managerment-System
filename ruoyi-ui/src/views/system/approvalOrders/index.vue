@@ -328,8 +328,8 @@ export default {
           });
           var length = this.$store.state.dict.dict.at(0).value.length;
           var status = this.form_1.status;
-          if (this.form_1.approvalRoleId > 200) {
-            var id = this.form_1.approvalRoleId - 2;
+          if (this.form_1.approvalRoleId > 100) {
+            var id = this.form_1.approvalRoleId - 1;
             this.form_1.approvalRoleId = id;
           }
 

@@ -1,5 +1,6 @@
 package com.ruoyi.system.mapper;
 
+import java.util.Date;
 import java.util.List;
 import com.ruoyi.system.domain.WorkOrders;
 
@@ -58,4 +59,12 @@ public interface WorkOrdersMapper
      * @return 结果
      */
     public int deleteWorkOrdersByOrderIds(Long[] orderIds);
+
+    /**
+     * 批量删除工单信息
+     *
+     * @param date 需要删除的数据主键集合
+     * @return 结果
+     */
+    public int updateOverTimeOrders(Date date);
 }

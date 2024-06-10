@@ -3,6 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.WorkOrdersMapper">
+
     <resultMap type="WorkOrders" id="WorkOrdersResult">
         <result property="orderId"    column="order_id"    />
         <result property="orderNumber"    column="order_number"    />
@@ -15,10 +16,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createdAt"    column="created_at"    />
         <result property="updatedAt"    column="updated_at"    />
         <result property="approvalRoleId"    column="approvalRoleId"    />
+        <result property="approvalFinishedTime"    column="approvalFinishedTime"    />
+        <result property="isOvertime"    column="isOvertime"    />
     </resultMap>
 
     <sql id="selectWorkOrdersVo">
-        select order_id, order_number, business_type, title, description, status, submitter_id, assignee_id, created_at, updated_at, approvalRoleId from work_orders
+        select order_id, order_number, business_type, title, description, status, submitter_id, assignee_id, created_at, updated_at, approvalRoleId, approvalFinishedTime, isOvertime from work_orders
     </sql>
 
     <select id="selectWorkOrdersList" parameterType="WorkOrders" resultMap="WorkOrdersResult">
@@ -36,6 +39,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createdAt != null "> and created_at = #{createdAt}</if>
             <if test="updatedAt != null "> and updated_at = #{updatedAt}</if>
             <if test="approvalRoleId != null "> and approvalRoleId = #{approvalRoleId}</if>
+            <if test="approvalFinishedTime != null "> and approvalFinishedTime = #{approvalFinishedTime}</if>
+            <if test="isOvertime != null "> and isOvertime = #{isOvertime}</if>
         </where>
     </select>
     
@@ -57,6 +62,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createdAt != null">created_at,</if>
             <if test="updatedAt != null">updated_at,</if>
             <if test="approvalRoleId != null">approvalRoleId,</if>
+            <if test="approvalFinishedTime != null">approvalFinishedTime,</if>
+            <if test="isOvertime != null">isOvertime,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderNumber != null and orderNumber != ''">#{orderNumber},</if>
@@ -69,6 +76,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createdAt != null">#{createdAt},</if>
             <if test="updatedAt != null">#{updatedAt},</if>
             <if test="approvalRoleId != null">#{approvalRoleId},</if>
+            <if test="approvalFinishedTime != null">#{approvalFinishedTime},</if>
+            <if test="isOvertime != null">#{isOvertime},</if>
          </trim>
     </insert>
 
@@ -85,6 +94,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createdAt != null">created_at = #{createdAt},</if>
             <if test="updatedAt != null">updated_at = #{updatedAt},</if>
             <if test="approvalRoleId != null">approvalRoleId = #{approvalRoleId},</if>
+            <if test="approvalFinishedTime != null">approvalFinishedTime = #{approvalFinishedTime},</if>
+            <if test="isOvertime != null">isOvertime = #{isOvertime},</if>
         </trim>
         where order_id = #{orderId}
     </update>
@@ -99,4 +110,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{orderId}
         </foreach>
     </delete>
+
+    <update id="updateOverTimeOrders" parameterType="Date">
+        update work_orders
+        SET isOvertime= 1
+        where approvalFinishedTime &lt;= #{date}
+        and approvalFinishedTime &lt;&gt; NULL
+    </update>
 </mapper>

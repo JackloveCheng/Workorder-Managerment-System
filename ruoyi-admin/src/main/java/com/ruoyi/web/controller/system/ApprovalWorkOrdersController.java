@@ -93,6 +93,11 @@ public class ApprovalWorkOrdersController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody WorkOrders workOrders)
     {
+//        if (workOrders.getStatus().equals("completed")) {
+//
+//
+//        }
+
         return toAjax(workOrdersService.updateWorkOrders(workOrders));
     }
 
