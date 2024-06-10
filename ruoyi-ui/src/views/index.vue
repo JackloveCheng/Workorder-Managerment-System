@@ -7,7 +7,7 @@
     </el-row>
     <el-row :gutter="20">
       <el-col :sm="24" :lg="12" style="padding-left: 20px">
-       
+
       </el-col>
 
       <el-col :sm="24" :lg="12" style="padding-left: 50px">
@@ -46,7 +46,7 @@
     </el-row>
     <el-divider />
   </div>
-         
+
 </template>
 
 <script>

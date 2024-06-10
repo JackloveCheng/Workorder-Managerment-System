@@ -58,3 +58,10 @@ export function refreshCache() {
     method: 'delete'
   })
 }
+
+export function data() {
+  return request({
+    url: '/system/config/data',
+    method: 'get',
+  })
+}
