@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
@@ -93,11 +94,9 @@ public class ApprovalWorkOrdersController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody WorkOrders workOrders)
     {
-//        if (workOrders.getStatus().equals("completed")) {
-//
-//
-//        }
-
+        if (workOrders.getStatus().equals("completed")) {
+            workOrders.setApprovalFinishedTime(new Date());
+        }
         return toAjax(workOrdersService.updateWorkOrders(workOrders));
     }
 

@@ -2,6 +2,8 @@ package com.ruoyi.system.mapper;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.system.domain.WorkOrders;
 
 /**
@@ -67,4 +69,7 @@ public interface WorkOrdersMapper
      * @return 结果
      */
     public int updateOverTimeOrders(Date date);
+
+    public List<Map<String,Object>> getWorkOrderCounts();
+
 }

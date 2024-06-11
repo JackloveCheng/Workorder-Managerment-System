@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OrderReportMapper">
+    
+    <resultMap type="OrderReport" id="OrderReportResult">
+        <result property="orderId"    column="order_id"    />
+        <result property="type"    column="type"    />
+        <result property="orderNum"    column="orderNum"    />
+    </resultMap>
+
+    <sql id="selectOrderReportVo">
+        select order_id, type, orderNum from order_report
+    </sql>
+
+    <select id="selectOrderReportList" parameterType="OrderReport" resultMap="OrderReportResult">
+        <include refid="selectOrderReportVo"/>
+        <where>  
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="orderNum != null "> and orderNum = #{orderNum}</if>
+        </where>
+    </select>
+    
+    <select id="selectOrderReportByOrderId" parameterType="Long" resultMap="OrderReportResult">
+        <include refid="selectOrderReportVo"/>
+        where order_id = #{orderId}
+    </select>
+        
+    <insert id="insertOrderReport" parameterType="OrderReport" useGeneratedKeys="true" keyProperty="orderId">
+        insert into order_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null and type != ''">type,</if>
+            <if test="orderNum != null">orderNum,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="orderNum != null">#{orderNum},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOrderReport" parameterType="OrderReport">
+        update order_report
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="orderNum != null">orderNum = #{orderNum},</if>
+        </trim>
+        where order_id = #{orderId}
+    </update>
+
+    <delete id="deleteOrderReportByOrderId" parameterType="Long">
+        delete from order_report where order_id = #{orderId}
+    </delete>
+
+    <delete id="deleteOrderReportByOrderIds" parameterType="String">
+        delete from order_report where order_id in 
+        <foreach item="orderId" collection="array" open="(" separator="," close=")">
+            #{orderId}
+        </foreach>
+    </delete>
+</mapper>

@@ -2,6 +2,8 @@ package com.ruoyi.system.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.system.domain.WorkOrders;
 
 /**
@@ -63,8 +65,16 @@ public interface IWorkOrdersService
     /**
      * 判断工单是否超时
      *
-     * @param orderId 工单信息主键
+     * @param date 工单信息主键
      * @return 工单信息
      */
     public int updateOverTimeOrders(Date date);
+
+    /**
+     * 判断工单是否超时
+     *
+     * @param  工单信息主键
+     * @return 工单信息
+     */
+    public List<Map<String,Object>> getWorkOrderCounts();
 }

@@ -115,6 +115,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update work_orders
         SET isOvertime= 1
         where approvalFinishedTime &lt;= #{date}
-        and approvalFinishedTime &lt;&gt; NULL
+        and approvalFinishedTime IS NOT NULL
     </update>
+
+    <select id="getWorkOrderCounts" resultType="java.util.Map">
+        SELECT
+            COUNT(*) AS allCount,
+            SUM(CASE WHEN isOvertime = 1 THEN 1 ELSE 0 END) AS overtimeCount,
+            SUM(CASE WHEN status = 'finished' THEN 1 ELSE 0 END) AS completeCount
+        FROM
+            work_orders
+        WHERE
+         approvalFinishedTime IS NOT NULL
+    </select>
 </mapper>

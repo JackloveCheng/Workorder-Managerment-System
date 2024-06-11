@@ -2,6 +2,8 @@ package com.ruoyi.system.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.WorkOrdersMapper;
@@ -100,4 +102,13 @@ public class WorkOrdersServiceImpl implements IWorkOrdersService
      */
     @Override
     public int updateOverTimeOrders(Date date) {return workOrdersMapper.updateOverTimeOrders(date);};
+
+    /**
+     *
+     *
+     * @param  工单信息主键
+     * @return 结果
+     */
+    @Override
+    public List<Map<String,Object>> getWorkOrderCounts() {return workOrdersMapper.getWorkOrderCounts();};
 }
