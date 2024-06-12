@@ -257,6 +257,7 @@ export default {
     cancel() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.form.status  = "rejected";
           addApprovalRecords(this.form).then(response => {
             this.$modal.msgSuccess("审批成功");
             this.open = false;
