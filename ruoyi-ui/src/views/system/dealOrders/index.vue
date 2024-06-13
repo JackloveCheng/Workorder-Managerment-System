@@ -72,9 +72,16 @@
             size="mini"
             type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="handleExecute(scope.row)"
             v-hasPermi="['system:dealOrders:edit']"
           >执行</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            icon="el-icon-edit"
+            @click="handleAssist(scope.row)"
+            v-hasPermi="['system:dealOrders:edit']"
+          >协助</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -121,14 +128,52 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+
+    <el-dialog :title="title" :visible.sync="openHelp" width="600px" append-to-body>
+      <el-form ref="form_1" :model="form_1" :rules="rules_1" label-width="80px">
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="选择协助部门" prop="assistingDepartment" label-width="120px">
+              <treeselect v-model="form_1.assistingDepartment" :options="deptOptions" :disable-branch-nodes="true" :show-count="true" placeholder="请选择协助部门" />
+            </el-form-item>
+            <el-form-item label="协助信息" prop="assistInfo" label-width="120px">
+              <el-input v-model="form_1.assistInfo" type="textarea" placeholder="请输入内容" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog :title="title" :visible.sync="openExe" width="500px" append-to-body>
+      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
+        <el-form-item label="回单信息">
+          <el-input v-model="form.receiptInfo" v-bind:disabled="isReadOnly" placeholder="请输入回单信息"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm_1">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { listDealOrders, getDealOrders, delDealOrders, addDealOrders, updateDealOrders } from "@/api/system/dealOrders";
+import { getAssistOrder, delAssistOrder, addAssistOrder, updateAssistOrder } from "@/api/system/assistOrder";
+
+import { deptTreeSelect } from "@/api/system/user";
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "DealOrders",
+  components: {Treeselect},
   dicts: ['sys_ticket_status', 'sys_ticket_type'],
   data() {
     return {
@@ -150,6 +195,8 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      openHelp:false,
+      openExe:false,
       isReadOnly:false,
       // 查询参数
       queryParams: {
@@ -161,6 +208,12 @@ export default {
       },
       // 表单参数
       form: {},
+      form_1: {
+        assistanceID: null,
+        workOrderID: null,
+        assistingDepartment: null,
+        assistInfo: null
+      },
       // 表单校验
       rules: {
         orderNumber: [
@@ -175,11 +228,22 @@ export default {
         status: [
           { required: true, message: "状态不能为空", trigger: "change" }
         ],
-      }
+      },
+      rules_1: {
+        assistInfo: [
+          { required: true, message: "协助信息不能为空", trigger: "blur" }
+        ],
+         assistingDepartment: [
+           { required: true, message: "协助部门不能为空", trigger: "blur" }
+        ],
+      },
+      // 部门树选项
+      deptOptions: undefined,
     };
   },
   created() {
     this.getList();
+    this.getDeptTree();
   },
   methods: {
     /** 查询接收工单列表 */
@@ -189,6 +253,12 @@ export default {
         this.dealOrdersList = response.rows;
         this.total = response.total;
         this.loading = false;
+      });
+    },
+    /** 查询部门下拉树结构 */
+    getDeptTree() {
+      deptTreeSelect().then(response => {
+        this.deptOptions = response.data;
       });
     },
     // 取消按钮
@@ -209,7 +279,8 @@ export default {
         assigneeId: null,
         createdAt: null,
         updatedAt: null,
-        approvalRoleId: null
+        approvalRoleId: null,
+        receiptInfo: null,
       };
       this.resetForm("form");
     },
@@ -257,21 +328,12 @@ export default {
     },
     /** 提交按钮 */
     submitForm() {
-      this.$refs["form"].validate(valid => {
+      this.$refs["form_1"].validate(valid => {
         if (valid) {
-          if (this.form.orderId != null) {
-            updateDealOrders(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addDealOrders(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
+          addAssistOrder(this.form_1).then(response => {
+            this.$modal.msgSuccess("新增成功");
+            this.openHelp = false;
+          });
         }
       });
     },
@@ -298,6 +360,38 @@ export default {
         this.open = true;
         this.isReadOnly = true;
         this.title = "工单详情";
+      });
+    },
+
+    handleAssist(row) {
+      this.form_1.workOrderID = row.orderId;
+      this.openHelp = true;
+    },
+    handleExecute(row) {
+      this.reset();
+      const orderId = row.orderId || this.ids;
+      getDealOrders(orderId).then(response => {
+        this.form = response.data;
+        this.openExe = true;
+      });
+    },
+    submitForm_1() {
+      var length = this.$store.state.dict.dict.at(0).value.length;
+      var status = this.form.status;
+      for (let i = 0; i < length; i++) {
+        var item = this.$store.state.dict.dict.at(0).value[i];
+        if (item.dictValue === status) {
+          this.form.status = this.$store.state.dict.dict.at(0).value[i + 1].dictValue;
+        }
+      }
+
+      delAssistOrder(this.form.orderId).then(() => {
+      })
+
+      updateDealOrders(this.form).then(response => {
+        this.$modal.msgSuccess("执行成功");
+        this.openExe = false;
+        this.getList();
       });
     }
 

@@ -319,6 +319,7 @@ export default {
       const orderId = row.orderId || this.ids
       getAcceptOrders(orderId).then(response => {
         this.form = response.data;
+        this.form.assigneeId = this.$store.state.id;
         var length = this.$store.state.dict.dict.at(0).value.length;
         var status = this.form.status;
         for (let i = 0; i < length; i++) {

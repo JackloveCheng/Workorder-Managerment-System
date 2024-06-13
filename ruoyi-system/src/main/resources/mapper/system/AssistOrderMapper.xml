@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.AssistOrderMapper">
+    
+    <resultMap type="AssistOrder" id="AssistOrderResult">
+        <result property="assistanceID"    column="assistanceID"    />
+        <result property="workOrderID"    column="workOrderID"    />
+        <result property="assistingDepartment"    column="assistingDepartment"    />
+        <result property="assistInfo"    column="assistInfo"    />
+    </resultMap>
+
+    <sql id="selectAssistOrderVo">
+        select assistanceID, workOrderID, assistingDepartment, assistInfo from assist_order
+    </sql>
+
+    <select id="selectAssistOrderList" parameterType="AssistOrder" resultMap="AssistOrderResult">
+        <include refid="selectAssistOrderVo"/>
+        <where>  
+            <if test="workOrderID != null "> and workOrderID = #{workOrderID}</if>
+            <if test="assistingDepartment != null "> and assistingDepartment = #{assistingDepartment}</if>
+            <if test="assistInfo != null  and assistInfo != ''"> and assistInfo = #{assistInfo}</if>
+        </where>
+    </select>
+    
+    <select id="selectAssistOrderByAssistanceID" parameterType="Long" resultMap="AssistOrderResult">
+        <include refid="selectAssistOrderVo"/>
+        where assistanceID = #{assistanceID}
+    </select>
+        
+    <insert id="insertAssistOrder" parameterType="AssistOrder" useGeneratedKeys="true" keyProperty="assistanceID">
+        insert into assist_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workOrderID != null">workOrderID,</if>
+            <if test="assistingDepartment != null">assistingDepartment,</if>
+            <if test="assistInfo != null and assistInfo != ''">assistInfo,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workOrderID != null">#{workOrderID},</if>
+            <if test="assistingDepartment != null">#{assistingDepartment},</if>
+            <if test="assistInfo != null and assistInfo != ''">#{assistInfo},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAssistOrder" parameterType="AssistOrder">
+        update assist_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workOrderID != null">workOrderID = #{workOrderID},</if>
+            <if test="assistingDepartment != null">assistingDepartment = #{assistingDepartment},</if>
+            <if test="assistInfo != null and assistInfo != ''">assistInfo = #{assistInfo},</if>
+        </trim>
+        where assistanceID = #{assistanceID}
+    </update>
+
+    <delete id="deleteAssistOrderByAssistanceID" parameterType="Long">
+        delete from assist_order where workOrderID = #{assistanceID}
+    </delete>
+
+    <delete id="deleteAssistOrderByAssistanceIDs" parameterType="String">
+        delete from assist_order where assistanceID in 
+        <foreach item="assistanceID" collection="array" open="(" separator="," close=")">
+            #{assistanceID}
+        </foreach>
+    </delete>
+</mapper>

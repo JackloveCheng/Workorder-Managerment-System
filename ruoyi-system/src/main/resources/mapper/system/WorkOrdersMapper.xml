@@ -18,10 +18,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="approvalRoleId"    column="approvalRoleId"    />
         <result property="approvalFinishedTime"    column="approvalFinishedTime"    />
         <result property="isOvertime"    column="isOvertime"    />
+        <result property="receiptInfo"    column="receiptInfo"    />
     </resultMap>
 
     <sql id="selectWorkOrdersVo">
-        select order_id, order_number, business_type, title, description, status, submitter_id, assignee_id, created_at, updated_at, approvalRoleId, approvalFinishedTime, isOvertime from work_orders
+        select order_id, order_number, business_type, title, description, status, submitter_id, assignee_id, created_at, updated_at, approvalRoleId, approvalFinishedTime, isOvertime, receiptInfo from work_orders
     </sql>
 
     <select id="selectWorkOrdersList" parameterType="WorkOrders" resultMap="WorkOrdersResult">
@@ -41,6 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="approvalRoleId != null "> and approvalRoleId = #{approvalRoleId}</if>
             <if test="approvalFinishedTime != null "> and approvalFinishedTime = #{approvalFinishedTime}</if>
             <if test="isOvertime != null "> and isOvertime = #{isOvertime}</if>
+            <if test="receiptInfo != null  and receiptInfo != ''"> and receiptInfo = #{receiptInfo}</if>
         </where>
     </select>
     
@@ -64,7 +66,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="approvalRoleId != null">approvalRoleId,</if>
             <if test="approvalFinishedTime != null">approvalFinishedTime,</if>
             <if test="isOvertime != null">isOvertime,</if>
-         </trim>
+            <if test="receiptInfo != null and receiptInfo != ''">receiptInfo,</if>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="orderNumber != null and orderNumber != ''">#{orderNumber},</if>
             <if test="businessType != null and businessType != ''">#{businessType},</if>
@@ -78,6 +81,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="approvalRoleId != null">#{approvalRoleId},</if>
             <if test="approvalFinishedTime != null">#{approvalFinishedTime},</if>
             <if test="isOvertime != null">#{isOvertime},</if>
+            <if test="receiptInfo != null and receiptInfo != ''">#{receiptInfo},</if>
          </trim>
     </insert>
 
@@ -96,6 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="approvalRoleId != null">approvalRoleId = #{approvalRoleId},</if>
             <if test="approvalFinishedTime != null">approvalFinishedTime = #{approvalFinishedTime},</if>
             <if test="isOvertime != null">isOvertime = #{isOvertime},</if>
+            <if test="receiptInfo != null  and receiptInfo != ''"> receiptInfo = #{receiptInfo},</if>
         </trim>
         where order_id = #{orderId}
     </update>

@@ -168,9 +168,6 @@
         <el-form-item label="描述">
           <editor v-model="form.description" :min-height="192" :readOnly="isReadOnly" />
         </el-form-item>
-        <el-form-item label="流程图">
-          <vue-flowchart :nodes="nodes" :edges="edges" :options="options"></vue-flowchart>
-        </el-form-item>
         <el-form-item label="工单状态" prop="status">
           <el-select v-model="form.status" v-bind:disabled="isReadOnly" placeholder="请选择工单状态">
             <el-option
@@ -180,6 +177,9 @@
               :value="dict.value"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="回单信息" prop="receiptInfo" v-show="isShow">
+          <el-input v-model="form.receiptInfo" v-bind:disabled="isReadOnly"  placeholder="请输入工单标题" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -272,6 +272,7 @@ export default {
       open_detail:false,
       open_approval:false,
       isReadOnly: false,
+      isShow:false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -346,7 +347,8 @@ export default {
         submitterId: null,
         assigneeId: null,
         createdAt: null,
-        updatedAt: null
+        updatedAt: null,
+        receiptInfo: null
       };
       this.resetForm("form");
     },
@@ -427,6 +429,12 @@ export default {
         this.form = response.data;
         this.open = true;
         this.isReadOnly = true;
+        if (this.form.status === "finished") {
+          this.isShow = true;
+        }
+        else {
+          this.isShow = false;
+        }
         this.title = "工单详情";
       });
     },

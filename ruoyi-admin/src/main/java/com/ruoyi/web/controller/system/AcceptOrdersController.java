@@ -99,6 +99,7 @@ public class AcceptOrdersController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody WorkOrders workOrders)
     {
+        workOrders.setAssigneeId(SecurityUtils.getUserId());
         return toAjax(workOrdersService.updateWorkOrders(workOrders));
     }
 

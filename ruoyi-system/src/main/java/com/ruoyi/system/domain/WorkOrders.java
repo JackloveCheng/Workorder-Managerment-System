@@ -17,57 +17,63 @@ public class WorkOrders extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 工单id */
     private Long orderId;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 工单数量 */
+    @Excel(name = "工单数量")
     private String orderNumber;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 工单类型 */
+    @Excel(name = "工单类型")
     private String businessType;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 工单本题 */
+    @Excel(name = "工单本题")
     private String title;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 工单描述 */
+    @Excel(name = "工单描述")
     private String description;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 工单状态 */
+    @Excel(name = "工单状态")
     private String status;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 提交人 */
+    @Excel(name = "提交人")
     private Long submitterId;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 接受人 */
+    @Excel(name = "接受人")
     private Long assigneeId;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 创建时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date createdAt;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 修改时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "修改时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date updatedAt;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 审批部门 */
+    @Excel(name = "审批部门")
     private Long approvalRoleId;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 审批完成时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "审批完成时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date approvalFinishedTime;
 
-    /** $column.columnComment */
-    @Excel(name = "${comment}", readConverterExp = "$column.readConverterExp()")
+    /** 是否超时 */
+    @Excel(name = "是否超时")
     private Integer isOvertime;
+
+    /** 回答信息 */
+    @Excel(name = "回答信息")
+    private String receiptInfo;
 
     public void setOrderId(Long orderId) 
     {
@@ -187,6 +193,15 @@ public class WorkOrders extends BaseEntity
     {
         return isOvertime;
     }
+    public void setReceiptInfo(String receiptInfo)
+    {
+        this.receiptInfo = receiptInfo;
+    }
+
+    public String getReceiptInfo()
+    {
+        return receiptInfo;
+    }
 
     @Override
     public String toString() {
@@ -204,6 +219,7 @@ public class WorkOrders extends BaseEntity
             .append("approvalRoleId", getApprovalRoleId())
             .append("approvalFinishedTime", getApprovalFinishedTime())
             .append("isOvertime", getIsOvertime())
+            .append("receiptInfo", getReceiptInfo())
             .toString();
     }
 }
