@@ -369,15 +369,6 @@ export default {
       });
     },
     submitForm_1() {
-      var length = this.$store.state.dict.dict.at(0).value.length;
-      var status = this.form.status;
-      for (let i = 0; i < length; i++) {
-        var item = this.$store.state.dict.dict.at(0).value[i];
-        if (item.dictValue === status) {
-          this.form.status = this.$store.state.dict.dict.at(0).value[i + 1].dictValue;
-        }
-      }
-
       delAssistOrder(this.form.orderId).then(() => {
       })
 
