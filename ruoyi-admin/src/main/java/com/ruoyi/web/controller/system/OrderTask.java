@@ -56,8 +56,18 @@ public class OrderTask
         Long overtimeCount = (Long) result.get(0).get("allCount");
         Long completedCount = (Long) result.get(0).get("completedCount");
         Long allCount = (Long) result.get(0).get("allCount");
+        if (overtimeCount == null) {
+            completedCount = 0L;
+        }
+        if (completedCount == null) {
+            completedCount = 0L;
+        }
+        if (allCount == null) {
+            completedCount = 0L;
+        }
         OrderReport report = new OrderReport();
         report.setOrderId(1L);
+
         report.setOrderNum(completedCount);
         orderReportService.updateOrderReport(report);
 
