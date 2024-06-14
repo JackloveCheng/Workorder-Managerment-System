@@ -2,6 +2,8 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.utils.DictUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -89,6 +91,9 @@ public class DealOrdersController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody WorkOrders workOrders)
     {
+        Long sort = DictUtils.getDictSort("sys_ticket_status", workOrders.getStatus());
+        String value = DictUtils.getDictValueBySort("sys_ticket_status", sort + 1L);
+        workOrders.setStatus(value);
         return toAjax(workOrdersService.updateWorkOrders(workOrders));
     }
 

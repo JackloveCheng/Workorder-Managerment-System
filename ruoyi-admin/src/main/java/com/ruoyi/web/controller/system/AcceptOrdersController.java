@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.common.utils.DictUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +100,9 @@ public class AcceptOrdersController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody WorkOrders workOrders)
     {
+        Long sort = DictUtils.getDictSort("sys_ticket_status", workOrders.getStatus());
+        String value = DictUtils.getDictValueBySort("sys_ticket_status", sort + 1L);
+        workOrders.setStatus(value);
         workOrders.setAssigneeId(SecurityUtils.getUserId());
         return toAjax(workOrdersService.updateWorkOrders(workOrders));
     }

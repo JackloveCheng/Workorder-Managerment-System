@@ -83,7 +83,6 @@ public class DictUtils
     {
         StringBuilder propertyString = new StringBuilder();
         List<SysDictData> datas = getDictCache(dictType);
-
         if (StringUtils.isNotNull(datas))
         {
             if (StringUtils.containsAny(separator, dictValue))
@@ -182,5 +181,53 @@ public class DictUtils
     public static String getCacheKey(String configKey)
     {
         return CacheConstants.SYS_DICT_KEY + configKey;
+    }
+
+    /**
+     * 根据字典类型和字典值获取字典排序
+     *
+     * @param dictType 字典类型
+     * @param dictValue 字典值
+     * @return 字典标签
+     */
+    public static Long getDictSort(String dictType, String dictValue)
+    {
+        StringBuilder propertyString = new StringBuilder();
+        List<SysDictData> datas = getDictCache(dictType);
+        if (StringUtils.isNotNull(datas))
+        {
+            for (SysDictData dict : datas)
+            {
+                if (dictValue.equals(dict.getDictValue()))
+                {
+                    return dict.getDictSort();
+                }
+            }
+            }
+        return -1L;
+    }
+
+    /**
+     * 根据字典类型和字典排序获取字典值
+     *
+     * @param dictType 字典类型
+     * @param dictSort 字典值
+     * @return 字典标签
+     */
+    public static String getDictValueBySort(String dictType, Long dictSort)
+    {
+        StringBuilder propertyString = new StringBuilder();
+        List<SysDictData> datas = getDictCache(dictType);
+        if (StringUtils.isNotNull(datas))
+        {
+            for (SysDictData dict : datas)
+            {
+                if (dictSort.equals(dict.getDictSort()))
+                {
+                    return dict.getDictValue();
+                }
+            }
+        }
+        return propertyString.toString();
     }
 }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.common.utils.DictUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,7 @@ public class ApprovalWorkOrdersController extends BaseController
     {
         if (SecurityUtils.getDeptId() != 100)
             workOrders.setApprovalRoleId(SecurityUtils.getLoginUser().getUser().getDept().getParentId());
+
         workOrders.setStatus("test");
         startPage();
         List<WorkOrders> list = workOrdersService.selectWorkOrdersList(workOrders);
@@ -94,6 +96,11 @@ public class ApprovalWorkOrdersController extends BaseController
     @PutMapping
     public AjaxResult edit(@RequestBody WorkOrders workOrders)
     {
+        if (workOrders.getStatus() != "refused") {
+            Long sort = DictUtils.getDictSort("sys_ticket_status", workOrders.getStatus());
+            String value = DictUtils.getDictValueBySort("sys_ticket_status", sort + 1L);
+            workOrders.setStatus(value);
+        }
         if (workOrders.getStatus().equals("completed")) {
             workOrders.setApprovalFinishedTime(new Date());
         }

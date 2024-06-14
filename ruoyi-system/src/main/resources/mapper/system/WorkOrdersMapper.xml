@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="title != null  and title != ''"> and title = #{title}</if>
             <if test="description != null  and description != ''"> and description = #{description}</if>
             <if test="status != null  and status != '' and status != 'test'"> and status = #{status}</if>
-            <if test="status == 'test'"> and status != 'completed'</if>
+            <if test="status == 'test'"> and status &lt;&gt; 'completed'</if>
             <if test="submitterId != null "> and submitter_id = #{submitterId}</if>
             <if test="assigneeId != null "> and assignee_id = #{assigneeId}</if>
             <if test="createdAt != null "> and created_at = #{createdAt}</if>

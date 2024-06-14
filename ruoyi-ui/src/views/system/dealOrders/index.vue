@@ -312,14 +312,6 @@ export default {
       const orderId = row.orderId || this.ids
       getDealOrders(orderId).then(response => {
         this.form = response.data;
-        var length = this.$store.state.dict.dict.at(0).value.length;
-        var status = this.form.status;
-        for (let i = 0; i < length; i++) {
-          var item = this.$store.state.dict.dict.at(0).value[i];
-          if (item.dictValue === status) {
-            this.form.status = this.$store.state.dict.dict.at(0).value[i + 1].dictValue;
-          }
-        }
         updateDealOrders(this.form).then(response => {
           this.$modal.msgSuccess("执行成功");
           this.getList();
@@ -370,6 +362,7 @@ export default {
     handleExecute(row) {
       this.reset();
       const orderId = row.orderId || this.ids;
+      this.isReadOnly = false;
       getDealOrders(orderId).then(response => {
         this.form = response.data;
         this.openExe = true;

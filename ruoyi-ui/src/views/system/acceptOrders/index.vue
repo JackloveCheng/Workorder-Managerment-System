@@ -319,20 +319,10 @@ export default {
       const orderId = row.orderId || this.ids
       getAcceptOrders(orderId).then(response => {
         this.form = response.data;
-        this.form.assigneeId = this.$store.state.id;
-        var length = this.$store.state.dict.dict.at(0).value.length;
-        var status = this.form.status;
-        for (let i = 0; i < length; i++) {
-          var item = this.$store.state.dict.dict.at(0).value[i];
-          if (item.dictValue === status) {
-            this.form.status = this.$store.state.dict.dict.at(0).value[i + 1].dictValue;
-          }
-        }
         updateAcceptOrders(this.form).then(response => {
           this.$modal.msgSuccess("接受成功");
           this.getList();
         });
-
       });
     },
     handleDetailInfo(row){

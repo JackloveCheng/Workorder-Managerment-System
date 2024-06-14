@@ -264,7 +264,7 @@ export default {
           });
           this.form_1.status = "refused";
           updateApprovalOrders(this.form_1).then(response => {
-            this.open = true;
+            this.open = false;
             this.getList();
           });
         }
@@ -327,19 +327,6 @@ export default {
             this.$modal.msgSuccess("审批成功");
             this.open = true;
           });
-          var length = this.$store.state.dict.dict.at(0).value.length;
-          var status = this.form_1.status;
-          if (this.form_1.approvalRoleId > 100) {
-            var id = this.form_1.approvalRoleId - 1;
-            this.form_1.approvalRoleId = id;
-          }
-
-          for (let i = 0; i < length; i++) {
-            var item = this.$store.state.dict.dict.at(0).value[i];
-            if (item.dictValue === status) {
-              this.form_1.status = this.$store.state.dict.dict.at(0).value[i + 1].dictValue;
-            }
-          }
           updateApprovalOrders(this.form_1).then(response => {
             this.$modal.msgSuccess("修改成功");
             this.open = false;
@@ -347,8 +334,6 @@ export default {
           });
         }
       });
-
-
       //改变工单状态
 
     },
