@@ -127,7 +127,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         SELECT
             COUNT(*) AS allCount,
             SUM(CASE WHEN isOvertime = 1 THEN 1 ELSE 0 END) AS overtimeCount,
-            SUM(CASE WHEN status = 'finished' THEN 1 ELSE 0 END) AS completeCount
+            SUM(CASE WHEN status = 'finished' THEN 1 ELSE 0 END) AS completedCount
         FROM
             work_orders
         WHERE

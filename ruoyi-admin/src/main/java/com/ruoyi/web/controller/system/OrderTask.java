@@ -1,4 +1,5 @@
 package com.ruoyi.web.controller.system;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -53,13 +54,18 @@ public class OrderTask
 
         List<Map<String,Object>> result =
         workOrdersService.getWorkOrderCounts();
-        Long overtimeCount = (Long) result.get(0).get("overtimeCount");
-        Long completedCount = (Long) result.get(0).get("completedCount");
+        BigDecimal overtimeCount1 = (BigDecimal) result.get(0).get("overtimeCount");
+        BigDecimal completedCount1 = (BigDecimal) result.get(0).get("completedCount");
         Long allCount = (Long) result.get(0).get("allCount");
-        if (overtimeCount == null) {
+
+        Long overtimeCount = overtimeCount1!= null ? Long.valueOf(overtimeCount1.longValue()) : null;
+        Long completedCount = completedCount1 != null ? Long.valueOf(completedCount1.longValue()) : null;
+
+
+        if (result.get(0).get("overtimeCount") == null) {
             overtimeCount = 0L;
         }
-        if (completedCount == null) {
+        if ( result.get(0).get("completedCount") == null) {
             completedCount = 0L;
         }
         if (allCount == null) {
