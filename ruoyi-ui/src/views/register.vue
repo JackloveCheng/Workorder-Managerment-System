@@ -1,7 +1,15 @@
 <template>
   <div class="register">
+    <div class="top-left-icon">
+      <img src="../assets/logo/logo.png" alt="Logo" class="logo-icon" />
+      <span class="logo-text">工单管理系统</span>
+    </div>
+    <div class="login-container">
+      <div class="left-image">
+        <img src="../assets/images/2021112402335851.jpeg" alt="Left Image">
+      </div>
     <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="register-form">
-      <h3 class="title">若依后台管理系统</h3>
+      <h3 class="title">Register</h3>
       <el-form-item prop="username">
         <el-input v-model="registerForm.username" type="text" auto-complete="off" placeholder="账号">
           <svg-icon slot="prefix" icon-class="user" class="el-input__icon input-icon" />
@@ -59,15 +67,19 @@
         </div>
       </el-form-item>
     </el-form>
+      </div>
     <!--  底部  -->
     <div class="el-register-footer">
-      <span>Copyright © 2018-2024 ruoyi.vip All Rights Reserved.</span>
+      <span>Copyright © 2024 Workorder System All Rights Reserved.</span>
     </div>
   </div>
 </template>
 
 <script>
 import { getCodeImg, register } from "@/api/login";
+import Cookies from "js-cookie";
+import { encrypt, decrypt } from '@/utils/jsencrypt'
+
 
 export default {
   name: "Register",
@@ -152,9 +164,50 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100%;
-  background-image: url("../assets/images/login-background.jpg");
+  background-image: url("../assets/images/665f856ee827e8b.jpg");
   background-size: cover;
 }
+
+.top-left-icon {
+  position: absolute;
+  top: 40px; /* 距离顶部的距离 */
+  left: 40px; /* 距离左侧的距离 */
+}
+
+.logo-icon {
+  width: 20px; /* 图标宽度 */
+  height: 20px; /* 图标高度 */
+  margin-right: 10px; /* 图标与文字之间的间距 */
+}
+
+.logo-text {
+  font-size: 18px; /* 文字大小 */
+  color: #ffffff; /* 文字颜色 */
+}
+
+.login-container {
+  display: flex;
+  align-items: stretch; /* 使得项目在垂直方向上拉伸以填充容器的高度 */
+  width: 1000px; /* 设置容器宽度，根据需要调整 */
+}
+
+.left-image {
+  flex: 1; /* 左侧图片占据剩余空间 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.left-image img {
+  width: auto;
+  height: 100%;
+}
+
+.login-form-container {
+  flex: 2; /* 登录表单占据剩余空间 */
+  padding: 0 40px; /* 根据需要调整左右间距 */
+}
+
 .title {
   margin: 0px auto 30px auto;
   text-align: center;
