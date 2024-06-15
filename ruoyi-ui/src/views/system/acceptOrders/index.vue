@@ -66,13 +66,11 @@
             type="text"
             icon="el-icon-info"
             @click="handleDetailInfo(scope.row)"
-            v-hasPermi="['system:acceptOrders:remove']"
           >详情</el-button>
           <el-button
             size="mini"
             type="text"
             @click="handleAccept(scope.row)"
-            v-hasPermi="['system:acceptOrders:remove']"
           >接受</el-button>
         </template>
       </el-table-column>

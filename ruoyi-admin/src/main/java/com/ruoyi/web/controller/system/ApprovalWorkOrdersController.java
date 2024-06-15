@@ -41,7 +41,6 @@ public class ApprovalWorkOrdersController extends BaseController
     /**
      * 查询工单信息列表
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:list')")
     @GetMapping("/list")
     public TableDataInfo list(WorkOrders workOrders)
     {
@@ -57,7 +56,6 @@ public class ApprovalWorkOrdersController extends BaseController
     /**
      * 导出工单信息列表
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:export')")
     @Log(title = "工单信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, WorkOrders workOrders)
@@ -70,7 +68,6 @@ public class ApprovalWorkOrdersController extends BaseController
     /**
      * 获取工单信息详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:query')")
     @GetMapping(value = "/{orderId}")
     public AjaxResult getInfo(@PathVariable("orderId") Long orderId)
     {
@@ -80,7 +77,6 @@ public class ApprovalWorkOrdersController extends BaseController
     /**
      * 新增工单信息
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:add')")
     @Log(title = "工单信息", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody WorkOrders workOrders)
@@ -91,7 +87,6 @@ public class ApprovalWorkOrdersController extends BaseController
     /**
      * 修改工单信息
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:edit')")
     @Log(title = "工单信息", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody WorkOrders workOrders)
@@ -104,13 +99,15 @@ public class ApprovalWorkOrdersController extends BaseController
         if (workOrders.getStatus().equals("completed")) {
             workOrders.setApprovalFinishedTime(new Date());
         }
+        if (workOrders.getApprovalRoleId() != 100) {
+            workOrders.setApprovalRoleId(workOrders.getApprovalRoleId() - 1L);
+        }
         return toAjax(workOrdersService.updateWorkOrders(workOrders));
     }
 
     /**
      * 删除工单信息
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:remove')")
     @Log(title = "工单信息", businessType = BusinessType.DELETE)
     @DeleteMapping("/{orderIds}")
     public AjaxResult remove(@PathVariable Long[] orderIds)

@@ -53,17 +53,17 @@ public class OrderTask
 
         List<Map<String,Object>> result =
         workOrdersService.getWorkOrderCounts();
-        Long overtimeCount = (Long) result.get(0).get("allCount");
+        Long overtimeCount = (Long) result.get(0).get("overtimeCount");
         Long completedCount = (Long) result.get(0).get("completedCount");
         Long allCount = (Long) result.get(0).get("allCount");
         if (overtimeCount == null) {
-            completedCount = 0L;
+            overtimeCount = 0L;
         }
         if (completedCount == null) {
             completedCount = 0L;
         }
         if (allCount == null) {
-            completedCount = 0L;
+            allCount = 0L;
         }
         OrderReport report = new OrderReport();
         report.setOrderId(1L);

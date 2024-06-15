@@ -89,13 +89,11 @@
             type="text"
             icon="el-icon-info"
             @click="handleDetailInfo(scope.row)"
-            v-hasPermi="['system:approvalOrders:edit']"
           >详情</el-button>
           <el-button
             size="mini"
             type="text"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:approvalOrders:edit']"
           >审批</el-button>
         </template>
       </el-table-column>
@@ -325,7 +323,7 @@ export default {
         if (valid) {
           addApprovalRecords(this.form).then(response => {
             this.$modal.msgSuccess("审批成功");
-            this.open = true;
+            this.open = false;
           });
           updateApprovalOrders(this.form_1).then(response => {
             this.$modal.msgSuccess("修改成功");

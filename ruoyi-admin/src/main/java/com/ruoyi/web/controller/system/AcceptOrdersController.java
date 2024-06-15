@@ -42,7 +42,6 @@ public class AcceptOrdersController extends BaseController
     /**
      * 查询接收工单列表
      */
-    @PreAuthorize("@ss.hasPermi('system:acceptOrders:list')")
     @GetMapping("/list")
     public TableDataInfo list(WorkOrders workOrders)
     {
@@ -60,7 +59,6 @@ public class AcceptOrdersController extends BaseController
     /**
      * 导出接收工单列表
      */
-    @PreAuthorize("@ss.hasPermi('system:acceptOrders:export')")
     @Log(title = "接收工单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, WorkOrders workOrders)
@@ -73,7 +71,6 @@ public class AcceptOrdersController extends BaseController
     /**
      * 获取接收工单详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:acceptOrders:query')")
     @GetMapping(value = "/{orderId}")
     public AjaxResult getInfo(@PathVariable("orderId") Long orderId)
     {
@@ -83,7 +80,6 @@ public class AcceptOrdersController extends BaseController
     /**
      * 新增接收工单
      */
-    @PreAuthorize("@ss.hasPermi('system:acceptOrders:add')")
     @Log(title = "接收工单", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody WorkOrders workOrders)
@@ -95,7 +91,6 @@ public class AcceptOrdersController extends BaseController
     /**
      * 修改接收工单
      */
-    @PreAuthorize("@ss.hasPermi('system:acceptOrders:edit')")
     @Log(title = "接收工单", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody WorkOrders workOrders)
@@ -110,7 +105,6 @@ public class AcceptOrdersController extends BaseController
     /**
      * 删除接收工单
      */
-    @PreAuthorize("@ss.hasPermi('system:acceptOrders:remove')")
     @Log(title = "接收工单", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{orderIds}")
     public AjaxResult remove(@PathVariable Long[] orderIds)

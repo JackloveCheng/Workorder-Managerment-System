@@ -39,7 +39,6 @@ public class AssistOrderController extends BaseController
     /**
      * 查询工单协助列表
      */
-    @PreAuthorize("@ss.hasPermi('system:assistOrder:list')")
     @GetMapping("/list")
     public TableDataInfo list(AssistOrder assistOrder)
     {
@@ -53,7 +52,6 @@ public class AssistOrderController extends BaseController
     /**
      * 导出工单协助列表
      */
-    @PreAuthorize("@ss.hasPermi('system:assistOrder:export')")
     @Log(title = "工单协助", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, AssistOrder assistOrder)
@@ -66,7 +64,6 @@ public class AssistOrderController extends BaseController
     /**
      * 获取工单协助详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:assistOrder:query')")
     @GetMapping(value = "/{assistanceID}")
     public AjaxResult getInfo(@PathVariable("assistanceID") Long assistanceID)
     {
@@ -76,7 +73,6 @@ public class AssistOrderController extends BaseController
     /**
      * 新增工单协助
      */
-    @PreAuthorize("@ss.hasPermi('system:assistOrder:add')")
     @Log(title = "工单协助", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody AssistOrder assistOrder)
@@ -87,7 +83,6 @@ public class AssistOrderController extends BaseController
     /**
      * 修改工单协助
      */
-    @PreAuthorize("@ss.hasPermi('system:assistOrder:edit')")
     @Log(title = "工单协助", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody AssistOrder assistOrder)
@@ -98,7 +93,6 @@ public class AssistOrderController extends BaseController
     /**
      * 删除工单协助
      */
-    @PreAuthorize("@ss.hasPermi('system:assistOrder:remove')")
     @Log(title = "工单协助", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{assistanceIDs}")
     public AjaxResult remove(@PathVariable Long assistanceIDs)

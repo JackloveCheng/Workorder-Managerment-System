@@ -66,21 +66,18 @@
             type="text"
             icon="el-icon-info"
             @click="handleDetailInfo(scope.row)"
-            v-hasPermi="['system:dealOrders:edit']"
           >详情</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleExecute(scope.row)"
-            v-hasPermi="['system:dealOrders:edit']"
           >执行</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
             @click="handleAssist(scope.row)"
-            v-hasPermi="['system:dealOrders:edit']"
           >协助</el-button>
         </template>
       </el-table-column>

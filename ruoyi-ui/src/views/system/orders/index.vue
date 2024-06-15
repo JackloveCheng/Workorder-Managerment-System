@@ -59,7 +59,6 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:orders:add']"
         >添加工单</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -70,7 +69,6 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:orders:remove']"
         >撤销工单</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -80,7 +78,6 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:orders:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -104,7 +101,6 @@
             type="text"
             icon="el-icon-info"
             @click="handleApprovalDetailInfo(scope.row)"
-            v-hasPermi="['system:orders:remove']"
           >详情</el-button>
         </template>
       </el-table-column>
@@ -125,14 +121,12 @@
             type="text"
             icon="el-icon-info"
             @click="handleDetailInfo(scope.row)"
-            v-hasPermi="['system:orders:remove']"
           >详情</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:orders:remove']"
           >删除</el-button>
         </template>
       </el-table-column>

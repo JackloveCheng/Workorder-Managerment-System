@@ -39,7 +39,6 @@ public class ApprovalRecordsController extends BaseController
     /**
      * 查询审批记录列表
      */
-    @PreAuthorize("@ss.hasPermi('system:approvalRecords:list')")
     @GetMapping("/list")
     public TableDataInfo list(ApprovalRecords approvalRecords)
     {
@@ -51,7 +50,6 @@ public class ApprovalRecordsController extends BaseController
     /**
      * 导出审批记录列表
      */
-    @PreAuthorize("@ss.hasPermi('system:approvalRecords:export')")
     @Log(title = "审批记录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, ApprovalRecords approvalRecords)
@@ -64,7 +62,6 @@ public class ApprovalRecordsController extends BaseController
     /**
      * 获取审批记录详细信息
      */
-    @PreAuthorize("@ss.hasPermi('system:approvalRecords:query')")
     @GetMapping(value = "/{approvalId}")
     public AjaxResult getInfo(@PathVariable("approvalId") Long approvalId)
     {
@@ -74,7 +71,6 @@ public class ApprovalRecordsController extends BaseController
     /**
      * 新增审批记录
      */
-    @PreAuthorize("@ss.hasPermi('system:orders:add')")
     @Log(title = "审批记录", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ApprovalRecords approvalRecords)
@@ -86,7 +82,6 @@ public class ApprovalRecordsController extends BaseController
     /**
      * 修改审批记录
      */
-    @PreAuthorize("@ss.hasPermi('system:approvalRecords:edit')")
     @Log(title = "审批记录", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ApprovalRecords approvalRecords)
@@ -97,7 +92,6 @@ public class ApprovalRecordsController extends BaseController
     /**
      * 删除审批记录
      */
-    @PreAuthorize("@ss.hasPermi('system:approvalRecords:remove')")
     @Log(title = "审批记录", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{approvalIds}")
     public AjaxResult remove(@PathVariable Long[] approvalIds)
